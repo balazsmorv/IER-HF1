@@ -1,0 +1,14 @@
+MAS helloworld {
+
+	infrastructure: Centralised
+	
+	environment: actions.HelloWorld
+
+	agents:
+		charger1;
+		car;
+
+
+	aslSourcePath:
+		"src/asl";
+}
