@@ -20,6 +20,7 @@ public class HelloWorld extends Environment {
   public static final int gridSize = 30;
   public static final int CHARGER = 8; 
   public static final int CAR = 0;
+  public static final int DEST = 7;
   public static int chargeLeft = 100;
   
   
@@ -87,7 +88,7 @@ public class HelloWorld extends Environment {
       
       addPercept(carPos);
       addPercept(chargerPos);
-      
+      addPercept(destination);
       
 
   }
@@ -107,6 +108,8 @@ public class HelloWorld extends Environment {
 		  } catch(Exception e) {
 			  e.printStackTrace();
 		  }
+		  
+		  add(DEST, 15, 0);
 		
 	  }
 	  
@@ -146,19 +149,34 @@ public class HelloWorld extends Environment {
         if (id == CAR) {
             c = Color.blue;
             label = "Car(" + chargeLeft + ")";
-        } else {
+        } else if (id == CHARGER) {
         	c = Color.green;
         	label = "Charger";
         }
         super.drawAgent(g, x, y, c, -1);
         if (id == CAR) {
             g.setColor(Color.black);
-        } else {
+        } else if(id == CHARGER){
             g.setColor(Color.white);
         }
         super.drawString(g, x, y, defaultFont, label);
         repaint();
     }
+	
+	@Override
+	public void draw(Graphics g, int x, int y, int object) {
+		System.out.println("draw");
+		if(object == HelloWorld.DEST) {
+			drawDest(g, x, y);
+		}
+	}
+	
+	public void drawDest(Graphics g, int x, int y) {
+		super.drawObstacle(g, x, y);
+		g.setColor(Color.red);
+		drawString(g, x, y, defaultFont, "Destination");
+	}
+	
   }
   
   

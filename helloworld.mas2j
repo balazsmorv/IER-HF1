@@ -5,6 +5,7 @@ MAS helloworld {
 	environment: actions.HelloWorld
 
 	agents:
+		charger2;
 		charger1;
 		car;
 

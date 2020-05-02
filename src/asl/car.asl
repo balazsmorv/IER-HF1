@@ -11,7 +11,16 @@ at(P) :- pos(P,X,Y) & pos(car,X,Y).
 
 /* Plans */
 
-+!at(charger1) : at(charger1).
++!at(dest) : at(dest).
+
++!at(dest)
+		 <- ?pos(dest,X,Y);
+		 	move_towards(X,Y);
+		 	!at(dest).
+		 	
+
+
++!at(charger1) : at(charger1) <- !at(dest).
  
 
 +!at(charger1) <- ?pos(charger1,X,Y);
