@@ -18,10 +18,27 @@ public class HelloWorld extends Environment {
 
   private Logger logger = Logger.getLogger("testenv.mas2j."+HelloWorld.class.getName());
   public static final int gridSize = 30;
-  public static final int CHARGER = 8; 
+  public static int chargeLeft = 100;
+  
+  /* Változtatható paraméterek */
+  
+  public static int consumption = 1; // fogyasztás/kocka
+  
+  // Töltők gyorsasága: mennyi energiát adjon körönként az autónak
+  public static int chargeRate0 = 1;
+  public static int chargeRate1 = 2;
+  public static int chargeRate2 = 3;
+  public static int chargeRate3 = 10;
+  /*---------------------------*/
+  
+  public static final int CHARGER = 1;
+  public static final int CHARGER1 = 2;
+  public static final int CHARGER2 = 3;
+  public static final int CHARGER3 = 4;
   public static final int CAR = 0;
   public static final int DEST = 7;
-  public static int chargeLeft = 100;
+  
+  
   
   
   private WorldModel model;
@@ -38,7 +55,6 @@ public class HelloWorld extends Environment {
 
   @Override
   public boolean executeAction(String agName, Structure action) {
-	  
 	  logger.info(agName + " " + action);
 	  
 	  try {
@@ -47,13 +63,11 @@ public class HelloWorld extends Environment {
               int x = (int)((NumberTerm)action.getTerm(0)).solve();
               int y = (int)((NumberTerm)action.getTerm(1)).solve();
               model.moveTowards(x,y);
-		  } else {
-			  //return false;
-			  System.out.println("else ág az executeActionben. return false lenne az elvárt viselkedés");
+		  } 
+		  
+		  if(action.getFunctor().equals("charge")) {
+			  model.chargeCar((int) ((NumberTerm)action.getTerm(0)).solve());
 		  }
-		  
-		  
-		  
 		  
 	  } catch (Exception e) {
 		  e.printStackTrace();
@@ -77,6 +91,7 @@ public class HelloWorld extends Environment {
   }
   
   void updatePercepts() {
+	  System.out.println("updating percepts.");
 	  clearPercepts();
 	  
 	  Location carLoc = model.getAgPos(CAR);
@@ -89,7 +104,7 @@ public class HelloWorld extends Environment {
       addPercept(carPos);
       addPercept(chargerPos);
       addPercept(destination);
-      
+      addPercept(Literal.parseLiteral("battery_charge(" + (chargeLeft) + ")"));
 
   }
   
@@ -126,9 +141,32 @@ public class HelloWorld extends Environment {
 			  r1.y++;
 		  else if (r1.y > y)
 			  r1.y--;
+		  chargeLeft -= consumption;
 		  setAgPos(CAR, r1);
-		  chargeLeft--;
 		  setAgPos(CHARGER, getAgPos(CHARGER)); // just to draw it in the view
+		  updatePercepts();
+	  }
+	  
+	  void chargeCar(int chargerID) {
+		  switch(chargerID) {
+		  case 0:
+			  chargeLeft += chargeRate0;
+			  break;
+		  case 1:
+			  chargeLeft += chargeRate1;
+			  break;
+		  case 2:
+			  chargeLeft += chargeRate2;
+			  break;
+		  case 3:
+			  chargeLeft += chargeRate3;
+			  break;
+		  }
+		  if(chargeLeft >= 100) {
+			  chargeLeft = 100;
+		  }
+		  setAgPos(CAR, getAgPos(CAR)); // redraw with the current charge level
+		  updatePercepts();
 	  }
 	  
   }
