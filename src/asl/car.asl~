@@ -24,12 +24,6 @@ at(P) :- pos(P,X,Y) & pos(car,X,Y).
 
 +!at(charger12) : at(charger12) & battery_charge(100) <- !at(dest);
 														.print("im going to destination :)").
-
-+!at(charger13) : at(charger13) & battery_charge(100) <- !at(dest);
-														.print("im going to destination :)").
-
-+!at(charger14) : at(charger14) & battery_charge(100) <- !at(dest);
-														.print("im going to destination :)").
 														
 +!at(charger11) : at(charger11) & not battery_charge(100)
 				 <- charge(0);
@@ -37,19 +31,9 @@ at(P) :- pos(P,X,Y) & pos(car,X,Y).
 				 !at(charger11).
 
 +!at(charger12) : at(charger12) & not battery_charge(100)
-				 <- charge(1);
+				 <- charge(0);
 				 .print("im charging :))")
 				 !at(charger12).				 
-
-+!at(charger13) : at(charger13) & not battery_charge(100)
-				 <- charge(2);
-				 .print("im charging :))")
-				 !at(charger13).
-
-+!at(charger14) : at(charger14) & not battery_charge(100)
-				 <- charge(3);
-				 .print("im charging :))")
-				 !at(charger14).
 				 
 +!at(charger11) <- ?pos(charger11,X,Y);
            move_towards(X,Y);
@@ -59,11 +43,7 @@ at(P) :- pos(P,X,Y) & pos(car,X,Y).
            move_towards(X,Y);
            !at(charger12).		   
            
-+!at(charger13) <- ?pos(charger13,X,Y);
-           move_towards(X,Y);
-           !at(charger13).	           
            
-+!at(charger14) <- ?pos(charger14,X,Y);
-           move_towards(X,Y);
-           !at(charger14).	           
+           
+           
            
