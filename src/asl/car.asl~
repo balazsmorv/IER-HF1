@@ -6,9 +6,13 @@ at(P) :- pos(P,X,Y) & pos(car,X,Y).
 
 /* Initial goals */
 
-!at(charger11).
+!start.
 
 /* Plans */
+
++!start
+		<- startAuction;
+			!at(charger11).
 
 +!at(dest) : at(dest).
 

@@ -5,10 +5,11 @@ MAS helloworld {
 	environment: actions.HelloWorld
 
 	agents:
-		//charger2;
-		charger1 #4;
+		charger1;
+		charger2;
+		charger3;
+		charger4;
 		car;
-
 
 	aslSourcePath:
 		"src/asl";
