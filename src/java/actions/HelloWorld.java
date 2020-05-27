@@ -19,6 +19,7 @@ public class HelloWorld extends Environment {
   private Logger logger = Logger.getLogger("testenv.mas2j."+HelloWorld.class.getName());
   public static final int gridSize = 30;
   public static int chargeLeft = 100;
+  public static int auction = 0;
   
   /* Valtoztathato parameterek */
   
@@ -69,6 +70,14 @@ public class HelloWorld extends Environment {
 			  model.chargeCar((int) ((NumberTerm)action.getTerm(0)).solve());
 		  }
 		  
+		  if(action.getFunctor().equals("bid")) {
+			  model.bid((int) ((NumberTerm)action.getTerm(0)).solve());
+		  }
+		  
+		  if(action.getFunctor().equals("startAuction")) {
+			  model.startAuction();
+		  }
+		  
 	  } catch (Exception e) {
 		  e.printStackTrace();
 	  }
@@ -114,6 +123,7 @@ public class HelloWorld extends Environment {
 	  addPercept(charger4Pos);
       addPercept(destination);
       addPercept(Literal.parseLiteral("battery_charge(" + (chargeLeft) + ")"));
+	  addPercept(Literal.parseLiteral("can_bid(" + (auction) + ")"));
 
   }
   
@@ -181,6 +191,16 @@ public class HelloWorld extends Environment {
 			  chargeLeft = 100;
 		  }
 		  setAgPos(CAR, getAgPos(CAR)); // redraw with the current charge level
+		  updatePercepts();
+	  }
+	  
+	  void bid(int value) {
+		  System.out.println("Bid: " + value);
+		  updatePercepts();
+	  }
+	  
+	  void startAuction() {
+		  auction = 1;
 		  updatePercepts();
 	  }
 	  
