@@ -2,23 +2,22 @@
 
 /* Initial beliefs and rules */
 
-at(P) :- pos(P,X,Y) & pos(charger1,X,Y).
-
 /* Initial goals */
 
 !start.
 
 /* Plans */
 
-+!start <- .print("I'm a charger.");
-		   !bidding.
++!start <- .print("I'm charger1.");
+		   !place_bid.
 		   
-+!bidding : can_bid(0) <- !bidding.
++!place_bid : can_bid(0) <- !place_bid.
 					
-+!bidding : can_bid(1) <- bid(2);
++!place_bid : can_bid(1) <- ?pos(car,X,Y);
+							bid(X,Y,1);
 							!sleep.
 
-+!bidding <- !bidding.
++!place_bid <- !place_bid.
 							
 +!sleep <- !sleep.
 
