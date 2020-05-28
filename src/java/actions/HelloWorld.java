@@ -19,11 +19,12 @@ public class HelloWorld extends Environment {
   private Logger logger = Logger.getLogger("testenv.mas2j."+HelloWorld.class.getName());
   public static final int gridSize = 30;
   public static int auction = 0;
+  public static int[] bids = {0, 0, 0, 0};
   
   /* Valtoztathato parameterek */
   
   public static int consumption = 1; 							// fogyasztas/kocka
-  public static int chargeLeft = 5;							// auto kezdeti toltottsege (max 100, toltok 100-ra toltik)
+  public static int chargeLeft = 100;							// auto kezdeti toltottsege (max 100, toltok 100-ra toltik)
   public static int[] chargeRates = {1, 2, 3, 10};	 			// Toltok gyorsasaga sorrendben: mennyi energiat adjon koronkent az autonak
   public static Location destination = new Location(15, 0);		// cel helyzete
   public static Location auto = new Location(15, 29);			// auto helyzete
@@ -130,6 +131,10 @@ public class HelloWorld extends Environment {
       addPercept(dest);
       addPercept(Literal.parseLiteral("battery_charge(" + (chargeLeft) + ")"));
 	  addPercept(Literal.parseLiteral("can_bid(" + (auction) + ")"));
+	  addPercept(Literal.parseLiteral("charger1_bid(" + (bids[0]) + ")"));
+	  addPercept(Literal.parseLiteral("charger2_bid(" + (bids[1]) + ")"));
+	  addPercept(Literal.parseLiteral("charger3_bid(" + (bids[2]) + ")"));
+	  addPercept(Literal.parseLiteral("charger4_bid(" + (bids[3]) + ")"));
 
   }
   
@@ -227,7 +232,8 @@ public class HelloWorld extends Environment {
 		  int bid_value = calculateDistance(ch.x, ch.y, x, y) + calculateDistance(ch.x, ch.y, destination.x, destination.y) + chargeTime;
 		  if (calculateDistance(ch.x, ch.y, x, y) > chargeLeft)
 			  bid_value = -1;
-		  System.out.println(n + " bid: " + bid_value);
+		  System.out.println(n + ". charger bid: " + bid_value);
+		  bids[n-1] = bid_value;
 		  updatePercepts();
 	  }
 	  
