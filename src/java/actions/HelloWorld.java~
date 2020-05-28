@@ -18,18 +18,21 @@ public class HelloWorld extends Environment {
 
   private Logger logger = Logger.getLogger("testenv.mas2j."+HelloWorld.class.getName());
   public static final int gridSize = 30;
-  public static int chargeLeft = 100;
   public static int auction = 0;
   
   /* Valtoztathato parameterek */
   
-  public static int consumption = 1; // fogyasztas/kocka
+  public static int consumption = 1; 							// fogyasztas/kocka
+  public static int chargeLeft = 100;							// auto kezdeti toltottsege (nem szazalek)
+  public static int[] chargeRates = {1, 2, 3, 10};	 			// Toltok gyorsasaga sorrendben: mennyi energiat adjon koronkent az autonak
+  public static Location destination = new Location(15, 0);		// cel helyzete
+  public static Location auto = new Location(15, 29);			// auto helyzete
   
-  // Toltok gyorsasaga: mennyi energiat adjon koronkent az autonak
-  public static int chargeRate0 = 1;
-  public static int chargeRate1 = 2;
-  public static int chargeRate2 = 3;
-  public static int chargeRate3 = 10;
+  public static Location c1 = new Location(0, 15);				// toltok helyzete
+  public static Location c2 = new Location(29, 15);				//
+  public static Location c3 = new Location(15, 15);				//
+  public static Location c4 = new Location(8, 10);				//
+  
   /*---------------------------*/
   
   public static final int CHARGER1 = 1;
@@ -117,14 +120,14 @@ public class HelloWorld extends Environment {
 	  Literal charger2Pos = Literal.parseLiteral("pos(charger2," + charger2Loc.x + "," + charger2Loc.y + ")");
 	  Literal charger3Pos = Literal.parseLiteral("pos(charger3," + charger3Loc.x + "," + charger3Loc.y + ")");
 	  Literal charger4Pos = Literal.parseLiteral("pos(charger4," + charger4Loc.x + "," + charger4Loc.y + ")");
-      Literal destination = Literal.parseLiteral("pos(dest,15,0)");
+      Literal dest = Literal.parseLiteral("pos(dest," + destination.x + "," + destination.y + ")");
       
       addPercept(carPos);
       addPercept(charger1Pos);
 	  addPercept(charger2Pos);
 	  addPercept(charger3Pos);
 	  addPercept(charger4Pos);
-      addPercept(destination);
+      addPercept(dest);
       addPercept(Literal.parseLiteral("battery_charge(" + (chargeLeft) + ")"));
 	  addPercept(Literal.parseLiteral("can_bid(" + (auction) + ")"));
 
@@ -139,17 +142,17 @@ public class HelloWorld extends Environment {
 		  super(gridSize, gridSize, 9); // width, height, number of agents
 		
 		  try {
-			  setAgPos(CAR, gridSize/2, gridSize - 1);
-			  setAgPos(CHARGER1, 0, gridSize/2);
-			  setAgPos(CHARGER2, gridSize-1, gridSize/2);
-			  setAgPos(CHARGER3, gridSize/2, gridSize/2);
-			  setAgPos(CHARGER4, 8, gridSize/2-5);
+			  setAgPos(CAR, auto.x, auto.y);
+			  setAgPos(CHARGER1, c1.x, c1.y);
+			  setAgPos(CHARGER2, c2.x, c2.y);
+			  setAgPos(CHARGER3, c3.x, c3.y);
+			  setAgPos(CHARGER4, c4.x, c4.y);
 			
 		  } catch(Exception e) {
 			  e.printStackTrace();
 		  }
 		  
-		  add(DEST, 15, 0);
+		  add(DEST, destination.x, destination.y);
 		
 	  }
 	  
@@ -178,16 +181,16 @@ public class HelloWorld extends Environment {
 	  void chargeCar(int chargerID) {
 		  switch(chargerID) {
 		  case 0:
-			  chargeLeft += chargeRate0;
+			  chargeLeft += chargeRates[0];
 			  break;
 		  case 1:
-			  chargeLeft += chargeRate1;
+			  chargeLeft += chargeRates[1];
 			  break;
 		  case 2:
-			  chargeLeft += chargeRate2;
+			  chargeLeft += chargeRates[2];
 			  break;
 		  case 3:
-			  chargeLeft += chargeRate3;
+			  chargeLeft += chargeRates[3];
 			  break;
 		  }
 		  if(chargeLeft >= 100) {
@@ -213,8 +216,9 @@ public class HelloWorld extends Environment {
 			  	ch = getAgPos(CHARGER4);
 				break;
 		  }
-		  int dist = calculateDistance(ch.x, ch.y, x, y);
-		  System.out.println(n + " charger distance: " + dist);
+		  System.out.println(n + " charger distance: " + calculateDistance(ch.x, ch.y, x, y));
+		  System.out.println(n + " charger power: " + chargeRates[n-1]);
+		  System.out.println(n + " destination distance: " + calculateDistance(destination.x, destination.y, x, y)); 
 		  updatePercepts();
 	  }
 	  

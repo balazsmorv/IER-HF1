@@ -23,7 +23,7 @@ public class HelloWorld extends Environment {
   /* Valtoztathato parameterek */
   
   public static int consumption = 1; 							// fogyasztas/kocka
-  public static int chargeLeft = 100;							// auto kezdeti toltottsege (nem szazalek)
+  public static int chargeLeft = 100;							// auto kezdeti toltottsege (max 100, toltok 100-ra toltik)
   public static int[] chargeRates = {1, 2, 3, 10};	 			// Toltok gyorsasaga sorrendben: mennyi energiat adjon koronkent az autonak
   public static Location destination = new Location(15, 0);		// cel helyzete
   public static Location auto = new Location(15, 29);			// auto helyzete
@@ -216,9 +216,14 @@ public class HelloWorld extends Environment {
 			  	ch = getAgPos(CHARGER4);
 				break;
 		  }
-		  System.out.println(n + " charger distance: " + calculateDistance(ch.x, ch.y, x, y));
-		  System.out.println(n + " charger power: " + chargeRates[n-1]);
-		  System.out.println(n + " destination distance: " + calculateDistance(destination.x, destination.y, x, y)); 
+		  int batteryAtCharger = chargeLeft - (calculateDistance(ch.x, ch.y, x, y) * consumption);
+		  int chargeTime = 0;
+		  while (batteryAtCharger < 100) {
+			  chargeTime++;
+			  batteryAtCharger += chargeRates[n-1];
+		  }
+		  int bid_value = calculateDistance(ch.x, ch.y, x, y) + calculateDistance(destination.x, destination.y, x, y) + chargeTime;
+		  System.out.println(n + " bid: " + bid_value);
 		  updatePercepts();
 	  }
 	  
