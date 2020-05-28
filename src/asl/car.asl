@@ -12,12 +12,12 @@ at(P) :- pos(P,X,Y) & pos(car,X,Y).
 
 +!start
 		<- startAuction;
-			!at(charger3).
+			!bidsArrive.
 
 +!bidsArrive : not charger1_bid(0) & not charger2_bid(0) & not charger3_bid(0) & not charger4_bid(0)
 		<- !at(charger3).
 		
-+!bidsArrive : bidsArrive.
++!bidsArrive <- !bidsArrive.
 			
 +!at(dest) : at(dest).
 
