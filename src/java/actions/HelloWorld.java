@@ -213,18 +213,7 @@ public class HelloWorld extends Environment {
 			  	ch = getAgPos(CHARGER4);
 				break;
 		  }
-		  int dist = 0;
-		  while((ch.x != x && ch.y != y) || (ch.x != x && ch.y == y) || (ch.x == x && ch.y != y)) {
-			dist++;
-			if (ch.x < x)
-			  ch.x++;
-			else if (ch.x > x)
-			  ch.x--;
-			if (ch.y < y)
-			  ch.y++;
-			else if (ch.y > y)
-			  ch.y--;  
-		  }
+		  int dist = calculateDistance(ch.x, ch.y, x, y);
 		  System.out.println(n + " charger distance: " + dist);
 		  updatePercepts();
 	  }
@@ -232,6 +221,22 @@ public class HelloWorld extends Environment {
 	  void startAuction() {
 		  auction = 1;
 		  updatePercepts();
+	  }
+	  
+	  int calculateDistance(int x1, int y1, int x2, int y2) {
+		  int d = 0;
+		  while((x1 != x2 && y1 != y2) || (x1 != x2 && y1 == y2) || (x1 == x2 && y1 != y2)) {
+			d++;
+			if (x1 < x2)
+			  x1++;
+			else if (x1 > x2)
+			  x1--;
+			if (y1 < y2)
+			  y1++;
+			else if (y1 > y2)
+			  y1--;  
+		  }
+		  return d;
 	  }
 	  
   }

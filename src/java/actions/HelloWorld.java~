@@ -71,7 +71,10 @@ public class HelloWorld extends Environment {
 		  }
 		  
 		  if(action.getFunctor().equals("bid")) {
-			  model.bid((int) ((NumberTerm)action.getTerm(0)).solve());
+			  int x = (int)((NumberTerm)action.getTerm(0)).solve();
+              int y = (int)((NumberTerm)action.getTerm(1)).solve();
+			  int n = (int)((NumberTerm)action.getTerm(2)).solve();
+              model.bid(x,y,n);
 		  }
 		  
 		  if(action.getFunctor().equals("startAuction")) {
@@ -110,10 +113,10 @@ public class HelloWorld extends Environment {
 	  Location charger4Loc = model.getAgPos(CHARGER4);
 
       Literal carPos = Literal.parseLiteral("pos(car," + carLoc.x + "," + carLoc.y + ")");
-      Literal charger1Pos = Literal.parseLiteral("pos(charger11," + charger1Loc.x + "," + charger1Loc.y + ")");
-	  Literal charger2Pos = Literal.parseLiteral("pos(charger12," + charger2Loc.x + "," + charger2Loc.y + ")");
-	  Literal charger3Pos = Literal.parseLiteral("pos(charger13," + charger3Loc.x + "," + charger3Loc.y + ")");
-	  Literal charger4Pos = Literal.parseLiteral("pos(charger14," + charger4Loc.x + "," + charger4Loc.y + ")");
+      Literal charger1Pos = Literal.parseLiteral("pos(charger1," + charger1Loc.x + "," + charger1Loc.y + ")");
+	  Literal charger2Pos = Literal.parseLiteral("pos(charger2," + charger2Loc.x + "," + charger2Loc.y + ")");
+	  Literal charger3Pos = Literal.parseLiteral("pos(charger3," + charger3Loc.x + "," + charger3Loc.y + ")");
+	  Literal charger4Pos = Literal.parseLiteral("pos(charger4," + charger4Loc.x + "," + charger4Loc.y + ")");
       Literal destination = Literal.parseLiteral("pos(dest,15,0)");
       
       addPercept(carPos);
@@ -194,8 +197,35 @@ public class HelloWorld extends Environment {
 		  updatePercepts();
 	  }
 	  
-	  void bid(int value) {
-		  System.out.println("Bid: " + value);
+	  void bid(int x, int y, int n) {
+		  Location ch = getAgPos(CAR);
+		  switch(n) {
+			case 1:
+			  	ch = getAgPos(CHARGER1);
+				break;
+			case 2:
+			  	ch = getAgPos(CHARGER2);
+				break;
+			case 3:
+			  	ch = getAgPos(CHARGER3);
+				break;
+			case 4:
+			  	ch = getAgPos(CHARGER4);
+				break;
+		  }
+		  int dist = 0;
+		  while((ch.x != x && ch.y != y) || (ch.x != x && ch.y == y) || (ch.x == x && ch.y != y)) {
+			dist++;
+			if (ch.x < x)
+			  ch.x++;
+			else if (ch.x > x)
+			  ch.x--;
+			if (ch.y < y)
+			  ch.y++;
+			else if (ch.y > y)
+			  ch.y--;  
+		  }
+		  System.out.println(n + " charger distance: " + dist);
 		  updatePercepts();
 	  }
 	  
