@@ -23,7 +23,7 @@ public class HelloWorld extends Environment {
   /* Valtoztathato parameterek */
   
   public static int consumption = 1; 							// fogyasztas/kocka
-  public static int chargeLeft = 100;							// auto kezdeti toltottsege (max 100, toltok 100-ra toltik)
+  public static int chargeLeft = 5;							// auto kezdeti toltottsege (max 100, toltok 100-ra toltik)
   public static int[] chargeRates = {1, 2, 3, 10};	 			// Toltok gyorsasaga sorrendben: mennyi energiat adjon koronkent az autonak
   public static Location destination = new Location(15, 0);		// cel helyzete
   public static Location auto = new Location(15, 29);			// auto helyzete
@@ -106,7 +106,7 @@ public class HelloWorld extends Environment {
   }
   
   void updatePercepts() {
-	  System.out.println("updating percepts.");
+	  //System.out.println("updating percepts.");
 	  clearPercepts();
 	  
 	  Location carLoc = model.getAgPos(CAR);
@@ -157,25 +157,27 @@ public class HelloWorld extends Environment {
 	  }
 	  
 	  void moveTowards(int x, int y) throws Exception {
-		  if(chargeLeft < 0) {
+		  if(chargeLeft <= 0) {
 			  System.out.println("Out of charge");
 		  }
-		  Location r1 = getAgPos(CAR);
-		  if (r1.x < x)
-			  r1.x++;
-		  else if (r1.x > x)
-			  r1.x--;
-		  if (r1.y < y)
-			  r1.y++;
-		  else if (r1.y > y)
-			  r1.y--;
-		  chargeLeft -= consumption;
-		  setAgPos(CAR, r1);
-		  setAgPos(CHARGER1, getAgPos(CHARGER1)); // just to draw it in the view
-		  setAgPos(CHARGER2, getAgPos(CHARGER2));
-		  setAgPos(CHARGER3, getAgPos(CHARGER3));
-		  setAgPos(CHARGER4, getAgPos(CHARGER4));
-		  updatePercepts();
+		  else {
+			  Location r1 = getAgPos(CAR);
+			  if (r1.x < x)
+				  r1.x++;
+			  else if (r1.x > x)
+				  r1.x--;
+			  if (r1.y < y)
+				  r1.y++;
+			  else if (r1.y > y)
+				  r1.y--;
+			  chargeLeft -= consumption;
+			  setAgPos(CAR, r1);
+			  setAgPos(CHARGER1, getAgPos(CHARGER1)); // just to draw it in the view
+			  setAgPos(CHARGER2, getAgPos(CHARGER2));
+			  setAgPos(CHARGER3, getAgPos(CHARGER3));
+			  setAgPos(CHARGER4, getAgPos(CHARGER4));
+			  updatePercepts();
+		  }
 	  }
 	  
 	  void chargeCar(int chargerID) {
@@ -222,7 +224,9 @@ public class HelloWorld extends Environment {
 			  chargeTime++;
 			  batteryAtCharger += chargeRates[n-1];
 		  }
-		  int bid_value = calculateDistance(ch.x, ch.y, x, y) + calculateDistance(destination.x, destination.y, x, y) + chargeTime;
+		  int bid_value = calculateDistance(ch.x, ch.y, x, y) + calculateDistance(ch.x, ch.y, destination.x, destination.y) + chargeTime;
+		  if (calculateDistance(ch.x, ch.y, x, y) > chargeLeft)
+			  bid_value = -1;
 		  System.out.println(n + " bid: " + bid_value);
 		  updatePercepts();
 	  }
