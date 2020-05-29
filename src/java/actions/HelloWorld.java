@@ -26,7 +26,7 @@ public class HelloWorld extends Environment {
   
   public static int consumption = 1; 							// fogyasztas/kocka
   public static int chargeLeft = 100;							// auto kezdeti toltottsege (max 100, toltok 100-ra toltik)
-  public static int[] chargeRates = {1, 2, 3, 10};	 			// Toltok gyorsasaga sorrendben: mennyi energiat adjon koronkent az autonak
+  public static int[] chargeRates = {1, 2, 0, 10};	 			// Toltok gyorsasaga sorrendben: mennyi energiat adjon koronkent az autonak
   public static Location destination = new Location(15, 0);		// cel helyzete
   public static Location auto = new Location(15, 29);			// auto helyzete
   
@@ -236,7 +236,7 @@ public class HelloWorld extends Environment {
 			  batteryAtCharger += chargeRates[n-1];
 		  }
 		  int bid_value = calculateDistance(ch.x, ch.y, x, y) + calculateDistance(ch.x, ch.y, destination.x, destination.y) + chargeTime;
-		  if (calculateDistance(ch.x, ch.y, x, y) > chargeLeft)
+		  if (calculateDistance(ch.x, ch.y, x, y) > chargeLeft || calculateDistance(ch.x, ch.y, destination.x, destination.y) > 100)
 			  bid_value = -1;
 		  System.out.println(n + ". charger bid: " + bid_value);
 		  bids[n-1] = bid_value;
