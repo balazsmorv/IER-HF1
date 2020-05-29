@@ -21,16 +21,25 @@ at(P) :- pos(P,X,Y) & pos(car,X,Y).
 +!bidsArrive <- !bidsArrive.
 
 +!findWinner : winner(1)
-		<- !at(charger1).
+		<-  .print("Winner: 1");
+			!at(charger1).
 	
 +!findWinner : winner(2)
-		<- !at(charger2).
+		<-  .print("Winner: 2");
+			!at(charger2).
 		
 +!findWinner : winner(3)
-		<- !at(charger3).
+		<-  .print("Winner: 3");
+			!at(charger3).
 		
 +!findWinner : winner(4)
-		<- !at(charger4).
+		<-  .print("Winner: 4");
+			!at(charger4).
+		
++!findWinner : winner(0)
+		<- !sleep.
+		
++!sleep <- !sleep.
 		
 +!at(dest) : at(dest).
 
