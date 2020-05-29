@@ -232,12 +232,14 @@ public class HelloWorld extends Environment {
 		  int batteryAtCharger = chargeLeft - (calculateDistance(ch.x, ch.y, x, y) * consumption);
 		  int chargeTime = 0;
 		  while (batteryAtCharger < 100) {
+			  if (chargeRates[n-1] == 0)
+				  break;
 			  chargeTime++;
 			  batteryAtCharger += chargeRates[n-1];
 		  }
 		  int bid_value = calculateDistance(ch.x, ch.y, x, y) + calculateDistance(ch.x, ch.y, destination.x, destination.y) + chargeTime;
-		  if (calculateDistance(ch.x, ch.y, x, y) > chargeLeft || calculateDistance(ch.x, ch.y, destination.x, destination.y) > 100)
-			  bid_value = -1;
+		  if (calculateDistance(ch.x, ch.y, x, y) > chargeLeft || calculateDistance(ch.x, ch.y, destination.x, destination.y) > 100 || chargeRates[n-1] == 0)
+			  bid_value = 9999;
 		  System.out.println(n + ". charger bid: " + bid_value);
 		  bids[n-1] = bid_value;
 		  updatePercepts();
@@ -249,13 +251,13 @@ public class HelloWorld extends Environment {
 	  }
 	  
 	  void decideWinner() {
-		  if (bids[0] <= bids[1] && bids[0] <= bids[2] && bids[0] <= bids[3] && bids[0] != -1)
+		  if (bids[0] <= bids[1] && bids[0] <= bids[2] && bids[0] <= bids[3] && bids[0] != 9999)
 			  winner = 1;
-		  else if (bids[1] <= bids[0] && bids[1] <= bids[2] && bids[1] <= bids[3] && bids[1] != -1)
+		  else if (bids[1] <= bids[0] && bids[1] <= bids[2] && bids[1] <= bids[3] && bids[1] != 9999)
 			  winner = 2;
-		  else if (bids[2] <= bids[0] && bids[2] <= bids[1] && bids[2] <= bids[3] && bids[2] != -1)
+		  else if (bids[2] <= bids[0] && bids[2] <= bids[1] && bids[2] <= bids[3] && bids[2] != 9999)
 			  winner = 3;
-		  else if (bids[3] <= bids[0] && bids[3] <= bids[1] && bids[3] <= bids[2] && bids[3] != -1)
+		  else if (bids[3] <= bids[0] && bids[3] <= bids[1] && bids[3] <= bids[2] && bids[3] != 9999)
 			  winner = 4;
 		  else
 			  System.out.println("No winners");
