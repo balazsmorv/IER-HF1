@@ -20,6 +20,7 @@ public class HelloWorld extends Environment {
   public static final int gridSize = 30;
   public static int auction = 0;
   public static int[] bids = {0, 0, 0, 0};
+  public static int winner = 0;
   
   /* Valtoztathato parameterek */
   
@@ -85,6 +86,10 @@ public class HelloWorld extends Environment {
 			  model.startAuction();
 		  }
 		  
+		  if(action.getFunctor().equals("decideWinner")) {
+			  model.decideWinner();
+		  }
+		  
 	  } catch (Exception e) {
 		  e.printStackTrace();
 	  }
@@ -135,6 +140,7 @@ public class HelloWorld extends Environment {
 	  addPercept(Literal.parseLiteral("charger2_bid(" + (bids[1]) + ")"));
 	  addPercept(Literal.parseLiteral("charger3_bid(" + (bids[2]) + ")"));
 	  addPercept(Literal.parseLiteral("charger4_bid(" + (bids[3]) + ")"));
+	  addPercept(Literal.parseLiteral("winner(" + (winner) + ")"));
 
   }
   
@@ -240,6 +246,19 @@ public class HelloWorld extends Environment {
 	  void startAuction() {
 		  auction = 1;
 		  updatePercepts();
+	  }
+	  
+	  void decideWinner() {
+		  if (bids[0] <= bids[1] && bids[0] <= bids[2] && bids[0] <= bids[3] && bids[0] != -1)
+			  winner = 1;
+		  else if (bids[1] <= bids[0] && bids[1] <= bids[2] && bids[1] <= bids[3] && bids[1] != -1)
+			  winner = 2;
+		  else if (bids[2] <= bids[0] && bids[2] <= bids[1] && bids[2] <= bids[3] && bids[2] != -1)
+			  winner = 3;
+		  else if (bids[3] <= bids[0] && bids[3] <= bids[1] && bids[3] <= bids[2] && bids[3] != -1)
+			  winner = 4;
+		  else
+			  System.out.println("No winners");
 	  }
 	  
 	  int calculateDistance(int x1, int y1, int x2, int y2) {

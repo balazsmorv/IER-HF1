@@ -15,25 +15,22 @@ at(P) :- pos(P,X,Y) & pos(car,X,Y).
 			!bidsArrive.
 
 +!bidsArrive : not charger1_bid(0) & not charger2_bid(0) & not charger3_bid(0) & not charger4_bid(0)
-		<- !goToWinner.
+		<-  decideWinner;
+			!findWinner.
 		
 +!bidsArrive <- !bidsArrive.
 
-+!goToWinner : charger1_bid < charger2_bid & charger1_bid < charger3_bid & charger1_bid < charger4_bid & not charger1_bid(-1)
-		<-  .print("winner: 1");
-			!at(charger1).
-
-+!goToWinner : charger2_bid < charger1_bid & charger2_bid < charger3_bid & charger2_bid < charger4_bid & not charger2_bid(-1)
-		<-  .print("winner: 2");
-			!at(charger2).
++!findWinner : winner(1)
+		<- !at(charger1).
+	
++!findWinner : winner(2)
+		<- !at(charger2).
 		
-+!goToWinner : charger3_bid < charger1_bid & charger3_bid < charger2_bid & charger3_bid < charger4_bid & not charger3_bid(-1)
-		<-  .print("winner: 3");
-			!at(charger3).
++!findWinner : winner(3)
+		<- !at(charger3).
 		
-+!goToWinner : charger4_bid < charger1_bid & charger4_bid < charger2_bid & charger4_bid < charger3_bid & not charger4_bid(-1)
-		<-  .print("winner: 4");
-			!at(charger4).
++!findWinner : winner(4)
+		<- !at(charger4).
 		
 +!at(dest) : at(dest).
 
